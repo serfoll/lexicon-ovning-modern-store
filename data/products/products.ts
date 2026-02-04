@@ -26,3 +26,21 @@ export const getProducts = async ({
 
   return products;
 };
+
+export const getProduct = async (
+  id: number,
+): Promise<{ ok: boolean; msg?: string; product?: Product }> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/products/${id}`);
+
+    if (!response.ok) return { ok: false, msg: "Something went wrong..." };
+
+    const product = await response.json();
+
+    return { ok: true, product: product };
+  } catch (error) {
+    console.error(error);
+
+    return { ok: false, msg: "Something went wrong" };
+  }
+};
