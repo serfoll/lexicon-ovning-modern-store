@@ -1,7 +1,7 @@
 import type { Product } from "@/types";
 import ProductGrid from "./product-grid";
 
-export function ProductsSection({
+export default function ProductsSection({
   heading,
   products,
 }: {

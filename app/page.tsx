@@ -1,9 +1,9 @@
-import { ProductsSection } from "@/components/products/products-section";
+import { ProductsSection } from "@/components";
 import { getProducts } from "@/data/products";
 
 export default async function Home() {
-  const products = await getProducts({ offset: 0, limit: 16 });
-
+  const products = await getProducts({ limit: 0, skip: 0 });
+  console.log("products: ", typeof products);
   return (
     <main>
       {/* HERO GOES HERE*/}
