@@ -1,37 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types";
-
-const API_BASE_URL = "https://api.escuelajs.co/api/v1";
-
-const fetchProducts = async ({
-  offset = 0,
-  limit = 0,
-}: {
-  offset?: number;
-  limit?: number;
-}): Promise<Product[]> => {
-  let products: Product[] = [];
-
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/products?offset=${offset}&limit=${limit}`,
-    );
-
-    if (!response.ok) throw new Error(`Error fetching products: ${response}`);
-
-    const data: Product[] = await response.json();
-
-    products = data;
-  } catch (error) {
-    console.error(error);
-  }
-
-  return products;
-};
+import { checkHostname, formatUrl } from "@/helpers";
+import { getProducts } from "@/data/products";
 
 export default async function Home() {
-  const products = await fetchProducts({ offset: 0, limit: 16 });
+  const products = await getProducts({ offset: 0, limit: 16 });
 
   return (
     <main>
@@ -44,23 +18,38 @@ export default async function Home() {
               key={product.id}
               className="overflow-hidden rounded-xl bg-neutral-200"
             >
-              <article className="group grid w-full pb-4 hover:cursor-pointer">
-                <div className="order-2 mx-auto mt-4 text-center text-pretty px-2">
+              <article className="group relative isolate grid w-full pb-4 hover:cursor-pointer">
+                <div className="order-2 mx-auto mt-4 text-center">
                   <h3 className="font-bold text-neutral-900 group-hover:underline">
-                    <Link href={`/shop/${product.slug}`}>{product.title}</Link>
+                    <Link href={`/products/${product.slug}`}>
+                      <span className="absolute inset-0 z-2"></span>
+                      {product.title}
+                    </Link>
                   </h3>
                   <p className="text-neutral-700">
                     <span>Price: </span>
                     <span className="font-bold">${product.price}</span>
                   </p>
                 </div>
-                <Image
-                  className="order-1 mx-auto w-full object-cover"
-                  src={product.images[0]}
-                  alt={`Product image of ${product.title}`}
-                  width={200}
-                  height={200}
-                />
+                <div className="order-1  h-77 overflow-hidden">
+                  {checkHostname(formatUrl(product.images[0])).inConfig ? (
+                    <Image
+                      className="w-full object-cover transition-all duration-200 group-hover:scale-[1.02]"
+                      src={checkHostname(formatUrl(product.images[0])).url}
+                      alt={`Product image of ${product.title}`}
+                      width={200}
+                      height={200}
+                    />
+                  ) : (
+                    <img
+                      className="w-full object-cover transition-all duration-200 group-hover:scale-[1.02]"
+                      src={checkHostname(formatUrl(product.images[0])).url}
+                      alt={`Product ${product.title}`}
+                      width={200}
+                      height={200}
+                    />
+                  )}
+                </div>
               </article>
             </li>
           ))}
