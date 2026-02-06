@@ -1,5 +1,30 @@
 import Image from "next/image";
 import { getProduct } from "@/data/products/products";
+import type { Metadata, ResolvingMetadata } from "next";
+
+type Props = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  // read route params
+  const { id } = await params;
+
+  // fetch data
+  const res = await getProduct(Number(id));
+
+  if (!res.ok)
+    return {
+      title: `Modern Store`,
+    };
+  const product = res.product;
+
+  return {
+    title: `Modern Store - ${product?.title}`,
+    description: product?.description,
+  };
+}
 
 export default async function SingleProduct({
   params,
