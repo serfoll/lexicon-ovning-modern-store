@@ -1,6 +1,7 @@
-import Image from "next/image";
+import type { Metadata } from "next";
 import { getProduct } from "@/data/products/products";
-import type { Metadata, ResolvingMetadata } from "next";
+import ProductImageGallery from "./components/product-image-gallery";
+import { Product } from "@/types";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -40,40 +41,15 @@ export default async function SingleProduct({
       </div>
     );
 
-  const product = res?.product;
+  const product = res?.product as Product;
 
   return (
-    <main className="container mx-auto grid space-y-4 px-8 md:grid-cols-2">
+    <main className="container mx-auto grid space-y-4 px-8 md:grid-cols-2 gap-4">
       <div className="order-2 space-y-4 md:place-self-center">
         <h1 className="text-3xl font-bold">{product?.title}</h1>
         <p className="">{product?.description}</p>
       </div>
-      <div className="order-1">
-        <Image
-          className="mx-auto"
-          src={product?.images[0] ?? ""}
-          alt={product?.title ?? ""}
-          width={400}
-          height={400}
-        />
-        <ul className="grid grid-cols-[repeat(auto-fit,minmax(4ch,1fr))]">
-          {product?.images &&
-            product?.images.length > 1 &&
-            product?.images.map((img) => (
-              <li key={img}>
-                <button type="button" className="cursor-pointer">
-                  <Image
-                    className="aspect-square object-center"
-                    src={img}
-                    alt={product?.title}
-                    width={300}
-                    height={300}
-                  />
-                </button>
-              </li>
-            ))}
-        </ul>
-      </div>
+      <ProductImageGallery product={product} />
     </main>
   );
 }
