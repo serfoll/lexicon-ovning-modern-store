@@ -1,14 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types";
+import WishButton from "./wish-button";
 
 export default function ProductCard({ product }: { product: Product }) {
   return (
-    <article className="group relative isolate grid w-full pb-4 hover:cursor-pointer">
+    <article className="relative isolate grid w-full pb-4">
+      <WishButton product={product} />
       <div className="order-2 mx-auto mt-4 text-center">
-        <h3 className="font-bold text-neutral-900 group-hover:underline">
-          <Link href={`/products/${product.id}`}>
-            <span className="absolute inset-0 z-2"></span>
+        <h3 className="font-bold text-neutral-900">
+          <Link href={`/products/${product.id}`} className="hover:underline">
+            <span className="absolute inset-0 z-2 mt-8 -mb-8"></span>
             {product.title}
           </Link>
         </h3>
