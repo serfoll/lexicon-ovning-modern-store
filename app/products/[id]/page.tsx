@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getProduct } from "@/data/products/products";
 import ProductImageGallery from "./components/product-image-gallery";
 import { Product } from "@/types";
+import WishButton from "@/components/products/wish-button";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -48,6 +49,7 @@ export default async function SingleProduct({
       <div className="order-2 space-y-4 md:place-self-center">
         <h1 className="text-3xl font-bold">{product?.title}</h1>
         <p className="">{product?.description}</p>
+        <WishButton product={product} />
       </div>
       <ProductImageGallery product={product} />
     </main>

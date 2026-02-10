@@ -1,9 +1,10 @@
+// components/product-card.tsx
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types";
 import WishButton from "./wish-button";
 
-export default function ProductCard({ product }: { product: Product }) {
+export default async function ProductCard({ product }: { product: Product }) {
   return (
     <article className="relative isolate grid w-full pb-4">
       <WishButton product={product} />
